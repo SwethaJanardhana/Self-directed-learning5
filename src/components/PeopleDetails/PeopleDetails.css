@@ -1,0 +1,8 @@
+.peopleCard {
+  margin: 0;
+  padding: 10px;
+  max-width: 500px;
+  background-color: aquamarine;
+  border-radius: 2rem;
+  box-shadow: 3px 11px 18px 2px rgba(2, 18, 14, 1);
+}

@@ -1,0 +1,17 @@
+.button {
+  display: inline-block;
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  font-family: "Lato", sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.filled-button {
+  background: linear-gradient(#6bdec5, #217d6a);
+  color: #030a1b;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}

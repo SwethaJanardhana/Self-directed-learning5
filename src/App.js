@@ -1,24 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import PeopleInSpace from "./components/PeopleInSpace";
+import PeopleDetails from "./components/PeopleDetails";
 
 function App() {
+  const URL = "http://api.open-notify.org/astros.json";
+  const [peopleInSpace, setPeopleInSpace] = useState(0);
+  const [peopleDetails, setPeopleDetails] = useState([]);
+  const [dispalyDetails, setDispalyDetails] = useState(false);
+  const [filteredPeopleDetails, setFilteredPeopleDetails] =
+    useState(peopleDetails);
+
+  function handlePeopleDetails(event) {
+    setDispalyDetails(true);
+    let filter = event.target.textContent.trim();
+    if (filter !== "All") {
+      setFilteredPeopleDetails(
+        peopleDetails.filter((person) => person.craft.includes(filter))
+      );
+    } else {
+      setFilteredPeopleDetails(peopleDetails);
+    }
+  }
+
+  async function fetchNumberOfPeopleInSpace() {
+    try {
+      const response = await fetch(URL);
+      const data = await response.json();
+      if (data.message === "success") {
+        setPeopleInSpace(data.number);
+        setPeopleDetails(data.people);
+      }
+    } catch (error) {
+      console.log("Exception Occured : ", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchNumberOfPeopleInSpace();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="mainContent">
+      <PeopleInSpace
+        peopleInSpace={peopleInSpace}
+        onButtonClick={handlePeopleDetails}
+      />
+      {dispalyDetails && (
+        <PeopleDetails peopleDetails={filteredPeopleDetails} />
+      )}
+    </main>
   );
 }
 
