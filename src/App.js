@@ -5,31 +5,27 @@ import PeopleDetails from "./components/PeopleDetails";
 
 function App() {
   const URL = "http://api.open-notify.org/astros.json";
-  const [peopleInSpace, setPeopleInSpace] = useState(0);
+
   const [peopleDetails, setPeopleDetails] = useState([]);
-  const [dispalyDetails, setDispalyDetails] = useState(false);
-  const [filteredPeopleDetails, setFilteredPeopleDetails] =
-    useState(peopleDetails);
+  const [filter, setFilter] = useState("");
 
   function handlePeopleDetails(event) {
-    setDispalyDetails(true);
-    let filter = event.target.textContent.trim();
-    if (filter !== "All") {
-      setFilteredPeopleDetails(
-        peopleDetails.filter((person) => person.craft.includes(filter))
-      );
-    } else {
-      setFilteredPeopleDetails(peopleDetails);
-    }
+    setFilter(event.target.textContent.trim());
   }
 
-  async function fetchNumberOfPeopleInSpace() {
+  async function fetchNumberOfPeopleInSpace(filter) {
     try {
       const response = await fetch(URL);
       const data = await response.json();
       if (data.message === "success") {
-        setPeopleInSpace(data.number);
-        setPeopleDetails(data.people);
+        const people = data.people;
+        if (filter && filter !== "All") {
+          setPeopleDetails(
+            people.filter((person) => person.craft.includes(filter))
+          );
+        } else {
+          setPeopleDetails(people);
+        }
       }
     } catch (error) {
       console.log("Exception Occured : ", error);
@@ -37,18 +33,17 @@ function App() {
   }
 
   useEffect(() => {
-    fetchNumberOfPeopleInSpace();
-  }, []);
+    fetchNumberOfPeopleInSpace(filter);
+  }, [filter]);
 
   return (
     <main className="mainContent">
       <PeopleInSpace
-        peopleInSpace={peopleInSpace}
+        peopleDetails={peopleDetails}
         onButtonClick={handlePeopleDetails}
+        filter={filter}
       />
-      {dispalyDetails && (
-        <PeopleDetails peopleDetails={filteredPeopleDetails} />
-      )}
+      {filter && <PeopleDetails peopleDetails={peopleDetails} />}
     </main>
   );
 }

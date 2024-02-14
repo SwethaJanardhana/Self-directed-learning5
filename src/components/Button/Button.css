@@ -15,3 +15,9 @@
   color: #030a1b;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
+
+.button--active {
+  background: linear-gradient(#e16b54, #e7480a);
+  color: #ffffff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
